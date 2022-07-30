@@ -6,7 +6,7 @@
 /*   By: fmilheir <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 17:15:20 by fmilheir          #+#    #+#             */
-/*   Updated: 2022/07/30 19:57:00 by fmilheir         ###   ########.fr       */
+/*   Updated: 2022/07/30 20:04:25 by fmilheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void    message(void)
 {
-    write(1, "usage: ./client [server-pid] [message]\n", 39);
+	write(1, "usage: ./client [server-pid] [message]\n", 39);
 	exit(0);
 }
 
@@ -27,7 +27,7 @@ int	send_bit(int pid, char *str)
 	if (str)
 		message = ft_strdup(str);
 	if (!message)
-		message();
+		
 	if (pid)
 		s_pid = pid;
 	if (message[++bits / 8])
