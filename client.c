@@ -6,73 +6,62 @@
 /*   By: fmilheir <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 17:15:20 by fmilheir          #+#    #+#             */
-/*   Updated: 2022/07/30 20:16:11 by fmilheir         ###   ########.fr       */
+/*   Updated: 2022/07/30 20:56:19 by fmilheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "minitalk.h"
 
-void	message(void)
+static void	action(int sig)
 {
-	write(1, "usage: ./client [server-pid] [message]\n", 39);
-	exit(0);
+	static int	received = 0;
+
+	if (sig == SIGUSR1)
+		++received;
+	else
+	{
+		ft_putnbr_fd(received, 1);
+		ft_putchar_fd('\n', 1);
+		exit(0);
+	}
 }
 
-int	send_bit(int pid, char *str)
+static void	mt_kill(int pid, char *str)
 {
-	static char	*message = 0;
-	static int	s_pid = 0;
-	static int	bits = -1;
+	int		i;
+	char	c;
 
-	if (str)
-		message = ft_strdup(str);
-	if (!message)
-		message();
-	if (pid)
-		s_pid = pid;
-	if (message[++bits / 8])
+	while (*str)
 	{
-		if (message[bits / 8] & (0x80 >> (bits % 8)))
+		i = 8;
+		c = *str++;
+		while (i--)
 		{
-			if (kill(s_pid, SIGUSR2) == -1)
-				error(message);
+			if (c >> i & 1)
+				kill(pid, SIGUSR2);
+			else
+				kill(pid, SIGUSR1);
+			usleep(100);
 		}
-		else if (kill(s_pid, SIGUSR1) == -1)
-			error(message);
-		return (0);
 	}
-	if (!send_bit(s_pid, message))
-		return (0);
-	free(message);
-	return (1);
-}
-
-void	handler_sigusr(int signum)
-{
-	int	end;
-
-	end = 0;
-	if (signum == SIGUSR1)
-		end = send_bit(0, 0);
-	else if (signum == SIGUSR2)
+	i = 8;
+	while (i--)
 	{
-		write(1, "An Error ocured!\n", 17);
-		exit(EXIT_FAILURE);
-	}
-	if (end)
-	{
-		write(1, "client: operation successful.\n", 30);
-		exit(EXIT_SUCCESS);
+		kill(pid, SIGUSR1);
+		usleep(100);
 	}
 }
 
 int	main(int argc, char **argv)
 {
-	if (argc != 3)
-		message();
-	signal(SIGUSR1, handler_sigusr);
-	signal(SIGUSR2, handler_sigusr);
-	send_bit(ft_atoi(argv[1]), argv[2]);
+	if (argc != 3 || !ft_strlen(argv[2]))
+		return (1);
+	ft_putstr_fd("Sent    : ", 1);
+	ft_putnbr_fd(ft_strlen(argv[2]), 1);
+	ft_putchar_fd('\n', 1);
+	ft_putstr_fd("Received: ", 1);
+	signal(SIGUSR1, action);
+	signal(SIGUSR2, action);
+	mt_kill(ft_atoi(argv[1]), argv[2]);
 	while (1)
 		pause();
 	return (0);

@@ -6,11 +6,18 @@
 #    By: fmilheir <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/30 17:45:20 by fmilheir          #+#    #+#              #
-#    Updated: 2022/07/30 18:27:41 by fmilheir         ###   ########.fr        #
+#    Updated: 2022/07/30 20:58:43 by fmilheir         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+SOURCES = server.c client.c
+OBJECTS = $(SOURCES:.c=.o)
+
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
+
 all:
+	server client
 	@cd libft && make all
 	@gcc -Wall -Wextra -Werror server.c libft/libft.a -o server
 	@gcc -Wall -Wextra -Werror client.c libft/libft.a -o client
