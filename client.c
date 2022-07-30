@@ -6,10 +6,10 @@
 /*   By: fmilheir <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 17:15:20 by fmilheir          #+#    #+#             */
-/*   Updated: 2022/07/30 20:56:19 by fmilheir         ###   ########.fr       */
+/*   Updated: 2022/07/30 21:04:48 by fmilheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "minitalk.h"
+	#include "minitalk.h"
 
 static void	action(int sig)
 {
