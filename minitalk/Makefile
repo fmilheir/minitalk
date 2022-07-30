@@ -19,25 +19,25 @@ RM			=	rm -f
 
 CFLAGS		=	-g -Wall -Wextra -Werror
 
-LIBFOLDER = ft_utils/libftutils.a
+LIBFOLDER = ./libft/libft.a
 
 all:			$(NAME_CLIENT) $(NAME_SERVER)
 
 
 $(NAME_CLIENT):	$(OBJ_CLIENT)
-				@make all -C ft_utils/
+				@make all -C libft/
 				$(CC) $(CFLAGS) -o $(NAME_CLIENT) $(OBJ_CLIENT) $(LIBFOLDER)
 $(NAME_SERVER):	$(OBJ_SERVER)
-				@make all -C ft_utils/
+				@make all -C libft/
 				$(CC) $(CFLAGS) -o $(NAME_SERVER) $(OBJ_SERVER) $(LIBFOLDER)
 
 
 clean:
 				$(RM) $(OBJ_CLIENT) $(OBJ_SERVER)
-				@make clean -C ft_utils/
+				@make clean -C libft/
 fclean:			clean
 				$(RM) $(NAME_CLIENT) $(NAME_SERVER) $(OBJ_CLIENT) $(OBJ_SERVER)
-				$(MAKE) fclean -C ft_utils/
+				$(MAKE) fclean -C libft/
 re:				fclean all
 
 .PHONY:		all clean fclean re

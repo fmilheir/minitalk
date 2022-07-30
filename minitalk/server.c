@@ -1,6 +1,6 @@
-#include "libft.h"
-#include <signal.h>
-#include "minitalk.h"
+# include <signal.h>
+# include <siginfo.h>
+# include "libft.h"
 
 
 // aqui converto o  int da funcao getpid numa string usando o itoa para poder contar com  o strlen o tamanho para por no write
@@ -9,7 +9,7 @@ void		print_pid(void)
 	char	*tmp_pid;
 
 	tmp_pid = ft_itoa(getpid());
-	write(1,  "pid: " , tmp_pid ,"\n", ft_strlen(tmp_pid) + 6);
+	write(1,  "pid:" + tmp_pid + "\n", ft_strlen(tmp_pid) + 6);
 	free(tmp_pid);
 }
 

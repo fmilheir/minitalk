@@ -1,7 +1,4 @@
-#include "libft.h"
-#include <signal.h>
 #include "minitalk.h"
-
 void    message(void)
 {
     write(1, "usage: ./client [server-pid] [message]\n", 39);
@@ -59,10 +56,10 @@ void	handler_sigusr(int signum)
 int main(int argc, char **argv)
 {
     if (argc != 3)
-        message()
+        message();
     signal(SIGUSR1, handler_sigusr);
 	signal(SIGUSR2, handler_sigusr);
-	send_bit(ft_atoi(argv[1]), argv[2]);
+	send_bit(atoi(argv[1]), argv[2]);
 	while (1)
 		pause();
 	return (0);
