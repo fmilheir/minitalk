@@ -1,28 +1,19 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: fmilheir <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/30 17:15:36 by fmilheir          #+#    #+#             */
-/*   Updated: 2022/07/30 19:53:59 by fmilheir         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include "minitalk.h"
 
-# include "minitalk.h"
-
-// aqui converto o  int da funcao getpid numa string usando o itoa para poder contar com  o strlen o tamanho para por no write
-void		print_pid(void)
+// aqui converto o  int da funcao getpid
+// numa string usando o itoa para 
+// poder contar com  o strlen o tamanho para por no write
+void	print_pid(void)
 {
 	char	*tmp_pid;
 
 	tmp_pid = ft_itoa(getpid());
-	write(1,  "pid:", 5);
+	write(1, "pid:", 5);
 	write(1, tmp_pid, ft_strlen(tmp_pid));
 	write(1, "/n", 2);
 	free(tmp_pid);
 }
+
 static void	action(int sig, siginfo_t *info, void *context)
 {
 	static int				i = 0;

@@ -6,13 +6,13 @@
 /*   By: fmilheir <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 17:15:20 by fmilheir          #+#    #+#             */
-/*   Updated: 2022/07/30 20:04:25 by fmilheir         ###   ########.fr       */
+/*   Updated: 2022/07/30 20:16:11 by fmilheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void    message(void)
+void	message(void)
 {
 	write(1, "usage: ./client [server-pid] [message]\n", 39);
 	exit(0);
@@ -27,7 +27,7 @@ int	send_bit(int pid, char *str)
 	if (str)
 		message = ft_strdup(str);
 	if (!message)
-		
+		message();
 	if (pid)
 		s_pid = pid;
 	if (message[++bits / 8])
@@ -66,11 +66,11 @@ void	handler_sigusr(int signum)
 	}
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-    if (argc != 3)
-        message();
-    signal(SIGUSR1, handler_sigusr);
+	if (argc != 3)
+		message();
+	signal(SIGUSR1, handler_sigusr);
 	signal(SIGUSR2, handler_sigusr);
 	send_bit(ft_atoi(argv[1]), argv[2]);
 	while (1)
