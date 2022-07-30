@@ -6,7 +6,7 @@
 /*   By: fmilheir <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 17:15:36 by fmilheir          #+#    #+#             */
-/*   Updated: 2022/07/30 18:28:58 by fmilheir         ###   ########.fr       */
+/*   Updated: 2022/07/30 19:53:59 by fmilheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,53 +18,48 @@ void		print_pid(void)
 	char	*tmp_pid;
 
 	tmp_pid = ft_itoa(getpid());
-	write(1,  "pid:" + tmp_pid + "\n", ft_strlen(tmp_pid) + 6);
+	write(1,  "pid:", 5);
+	write(1, tmp_pid, ft_strlen(tmp_pid));
+	write(1, "/n", 2);
 	free(tmp_pid);
 }
-
-
-void	handler_sigusr(int signum, siginfo_t *info, void *context)
+static void	action(int sig, siginfo_t *info, void *context)
 {
-	static char	c = 0xFF;
-	static int	bits = 0;
-	static int	pid = 0;
-	static char	*message = 0;
+	static int				i = 0;
+	static pid_t			client_pid = 0;
+	static unsigned char	c = 0;
 
 	(void)context;
-	if (info->si_pid)
-		pid = info->si_pid;
-	if (signum == SIGUSR1)
-		c ^= 0x80 >> bits;
-	else if (signum == SIGUSR2)
-		c |= 0x80 >> bits;
-	if (++bits == 8)
+	if (!client_pid)
+		client_pid = info->si_pid;
+	c |= (sig == SIGUSR2);
+	if (++i == 8)
 	{
-		if (c)
-			message = ft_straddc(message, c);
-		else
-			message = print_string(message);
-		bits = 0;
-		c = 0xFF;
+		i = 0;
+		if (!c)
+		{
+			kill(client_pid, SIGUSR2);
+			client_pid = 0;
+			return ;
+		}
+		ft_putchar_fd(c, 1);
+		c = 0;
+		kill(client_pid, SIGUSR1);
 	}
-	if (kill(pid, SIGUSR1) == -1)
-		error(pid, message);
-}
+	else
+		c <<= 1;
 }
 
-void    main(void)
+int	main(void)
 {
-    struct sigaction	s_sigaction;
+	struct sigaction	s_sigaction;
 
-    print_pid();
+	print_pid();
+	s_sigaction.sa_sigaction = action;
 	s_sigaction.sa_flags = SA_SIGINFO;
-	my_sa.sa_sigaction = my_handler;
-	/*sigemptyset(&sa.sa_mask);
-	sigaddset(&sa.sa_mask, SIGUSR1);
-	sigaddset(&sa.sa_mask, SIGUSR2);*/
-	sigaction(SIGUSR1, &s_sigaction, NULL);
-	sigaction(SIGUSR2, &s_sigaction, NULL);
+	sigaction(SIGUSR1, &s_sigaction, 0);
+	sigaction(SIGUSR2, &s_sigaction, 0);
 	while (1)
 		pause();
 	return (0);
 }
-

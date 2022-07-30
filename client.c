@@ -6,7 +6,7 @@
 /*   By: fmilheir <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/30 17:15:20 by fmilheir          #+#    #+#             */
-/*   Updated: 2022/07/30 17:17:46 by fmilheir         ###   ########.fr       */
+/*   Updated: 2022/07/30 19:57:00 by fmilheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	send_bit(int pid, char *str)
 	if (str)
 		message = ft_strdup(str);
 	if (!message)
-		error(0);
+		message();
 	if (pid)
 		s_pid = pid;
 	if (message[++bits / 8])
@@ -41,7 +41,7 @@ int	send_bit(int pid, char *str)
 			error(message);
 		return (0);
 	}
-	if (!send_null(s_pid, message))
+	if (!send_bit(s_pid, message))
 		return (0);
 	free(message);
 	return (1);
